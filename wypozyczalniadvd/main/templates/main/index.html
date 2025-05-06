@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+{% load static %}
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Wypożyczalnia płyt DVD</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <link rel="shortcut icon" href="{% static 'plyta.png'%}" type="image/x-icon">
+    </head>
+
+    <body>
+        <header>
+            <div class="zawartosc_headera">
+                <img src="{% static 'plyta.png'%}" alt="plyta dvd" width="50px" style="float: left">
+                <h1>Wypożyczalnia płyt DVD</h1>
+            </div>
+        </header>
+        <main>
+            <div class="formularze">
+                {% if template_data.uzytkownik.is_authenticated == False %}
+                <form method='post' class='formularz_logowania'>
+                    {% csrf_token %}
+                    <h3>Zarejestruj się</h3>
+                    {{ template_data.formularz_rejestracji.as_p }}
+                    <button type='submit' name='rejestracja'>Zarejestruj</button> 
+                </form>
+                {% if template_data.powodzenie_rejestracji %}
+                    <p>Rejestracja zakończona sukcesem!</p>
+                {% endif %}
+                <form method='post' class='formularz_logowania'>
+                    {% csrf_token %}
+                    <h3>Zaloguj się</h3>
+                    {{template_data.formularz_logowania.as_p}}
+                    <button type='submit' name='login'>Zaloguj</button>
+                </form>
+                {% endif %}
+                
+                {% if template_data.uzytkownik.is_authenticated %}
+                <div class='lista_wypozyczonych'>
+                    <form method='post'>
+                        {% csrf_token %}
+                        <button type='submit' name='wyloguj'>Wyloguj</button>
+                    </form>
+
+                    <p>Witaj {{template_data.uzytkownik.username}} twoje wypożyczone płyty:</p>
+                    <ul>
+                        {% for katalog in template_data.wypozyczone_katalogi %}
+                        <li>{{katalog.nazwa}}, {{katalog.rezyseria}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+        <section>
+            <h2>Katalog płyt DVD</h2>
+            <div class="tabela">
+                <table>
+                    <tr>
+                        <th>
+                            <a href="?sortowanie=nazwa&kolejnosc={% if template_data.kolejnosc == 'asc' and template_data.pole_sortowania == 'nazwa' %}desc{% else %}asc{% endif %}">nazwa
+                            {% if template_data.pole_sortowania == 'nazwa' %}
+                                {% if template_data.kolejnosc == 'asc' %}
+                                    ↑
+                                {% else %}
+                                    ↓
+                                {% endif %}
+                            {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a
+                                href="?sortowanie=rezyseria&kolejnosc={% if template_data.kolejnosc == 'asc' and template_data.pole_sortowania == 'rezyseria' %}desc{% else %}asc{% endif %}">rezyseria
+                                {% if template_data.pole_sortowania == 'rezyseria' %}
+                                    {% if template_data.kolejnosc == 'asc' %}
+                                        ↑
+                                    {% else %}
+                                        ↓
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a
+                                href="?sortowanie=gatunek&kolejnosc={% if template_data.kolejnosc == 'asc' and template_data.pole_sortowania == 'gatunek' %}desc{% else %}asc{% endif %}">gatunek
+                                {% if template_data.pole_sortowania == 'gatunek' %}
+                                    {% if template_data.kolejnosc == 'asc' %}
+                                        ↑
+                                    {% else %}
+                                        ↓
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a
+                                href="?sortowanie=ilosc&kolejnosc={% if template_data.kolejnosc == 'asc' and template_data.pole_sortowania == 'ilosc' %}desc{% else %}asc{% endif %}">ilosc
+                                {% if template_data.pole_sortowania == 'ilosc' %}
+                                    {% if template_data.kolejnosc == 'asc' %}
+                                        ↑
+                                    {% else %}
+                                        ↓
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>Wypożyczanie</th>
+                        <th>Zwracanie</th>
+                    </tr>
+                    {% for film in template_data.filmy %}
+                    <tr>
+                        <td>{{film.nazwa}}</td>
+                        <td>{{film.rezyseria}}</td>
+                        <td>{{film.gatunek}}</td>
+                        <td>{{film.ilosc}}</td>
+                        <td>
+                            {% if template_data.uzytkownik.is_authenticated and film.id not in template_data.wypozyczenia_id and film.ilosc > 0 %}
+                            <form method='POST'>
+                                {% csrf_token %}
+                                <input type='hidden' name='id' value='{{ film.id }}'>
+                                <button type='submit' name='wypozycz'>Wypożycz</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if template_data.uzytkownik.is_authenticated and film.id in template_data.wypozyczenia_id %}
+                            <form method='POST'>
+                                {% csrf_token %}
+                                <input type='hidden' name='id' value='{{ film.id }}'>
+                                <button type='submit' name='zwroc'>Zwróć</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </section>
+        <footer>
+            <p>Stronę wykonał Matusiewicz Przemysław</p>
+        </footer>
+    </body>
+</html>

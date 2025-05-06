@@ -1,0 +1,120 @@
+body, html {
+    height: 100%;
+    margin: auto;
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+header {
+    background-color: #c75e13;
+    width: 100%;
+    height: 10%;
+    float: left;
+}
+
+.zawartosc_headera {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+main {
+    background-color: #f58127;
+    width: 40%;
+    height: 85%;
+    float: left;
+    overflow-y: auto;
+}
+
+main::-webkit-scrollbar {
+    width: 8px;
+}
+
+main::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+main::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+table, td, th {
+    margin: auto;
+    text-align: center;
+    border: 1px rgb(177, 177, 177) solid;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+tr:nth-child(even) {
+    background-color: white;
+}
+
+tr:nth-child(odd) {
+    background-color: rgb(239, 239, 239);
+}
+
+th {
+    background-color: #22b357;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+label {
+    display: block;
+}
+
+table {
+    width: 80%;
+}
+
+.tabela {
+    height: 400px;
+    width: 80%;
+    margin: auto;
+    overflow-y: scroll;
+}
+
+.tabela > table {
+    width: 100%;
+}
+
+section {
+    background-color: #ffa424;
+    width: 60%;
+    height: 85%;
+    float: left;
+}
+
+footer {
+    background-color: #c75e13;
+    width: 100%;
+    height: 5%;
+    clear: both;
+    text-align: right;
+}
+
+.formularz_logowania, .lista_wypozyczonych {
+    background-color: rgb(255, 165, 96);
+    margin: 15px auto;
+    width: 300px;
+    padding: 15px;
+    padding-bottom: 20px;
+    border: solid #c75e13 3px;
+    border-radius: 15px;
+}
+
+ul {
+    display: inline-block;
+    padding-left: 0;
+    text-align: left;
+    width: 95%;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
